@@ -1,5 +1,4 @@
 import pygame
-from pygame.locals import *
 
 from src.core.palette import Palette
 
@@ -22,7 +21,7 @@ class Brick(pygame.sprite.Sprite):
         self.H_SIZE = h_size
         self.V_SIZE = v_size
 
-        self.powerup = powerup
+        self._powerup = powerup
 
         if not colour:
             colour = random.choice(self.palette.get_palette())
@@ -35,5 +34,9 @@ class Brick(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+
+    def destroy(self):
+        return self._powerup
+        self.kill()
 
 

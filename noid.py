@@ -21,8 +21,9 @@ def import_settings():
 
 
 class Noid:
-    __bricks = []
+    __bricks = pygame.sprite.Group()
     player = None
+    level = "01"
 
     def __init__(self):
 
@@ -33,6 +34,12 @@ class Noid:
         self._size = self.width, self.height = settings["HSize"], settings["VSize"]
 
         self.FPS = pygame.time.Clock()
+
+    def increment_level(self):
+        new_level = str(int(self.level) + 1)
+        if len(new_level) == 1:
+            new_level = "0" + new_level
+        self.level = new_level
 
     def on_init(self):
         pygame.init()
@@ -55,6 +62,9 @@ class Noid:
         for brick in self.__bricks:
             brick.draw(self._display_surf)
 
+        if not self.__bricks:
+            self.increment_level()
+
     def on_render(self):
         pass
 
@@ -70,7 +80,7 @@ class Noid:
         level = Level(lvl)
         for brick in level.bricks:
             brick.draw(self._display_surf)
-            self.__bricks.append(brick)
+            self.__bricks.add(brick)
 
     def on_execute(self):
         if self.on_init() is False:
@@ -79,6 +89,7 @@ class Noid:
         self.display_level("01")
 
         while self._running:
+            # this line must run before on_loop()
             self._display_surf.fill(palette.get_colour("white"))
             self.on_loop()
 
