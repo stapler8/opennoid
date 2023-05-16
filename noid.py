@@ -5,10 +5,10 @@ from pygame.locals import *
 
 import json
 from src.core.palette import Palette
+from src.core.level import Level
 from src.objects.player import Player
 
 settings = {}
-
 
 palette = Palette()
 
@@ -21,7 +21,8 @@ def import_settings():
 
 
 class Noid:
-    __objects = {}
+    __bricks = []
+    player = None
 
     def __init__(self):
 
@@ -48,13 +49,11 @@ class Noid:
         # update events and objects
         for event in pygame.event.get():
             self.on_event(event)
-        for obj in self.__objects.values():
-            try:
-                obj.update()
-            except Exception as ex:
-                print(ex)
 
-        self.__objects["player"].draw(self._display_surf)
+        self.player.update()
+        self.player.draw(self._display_surf)
+        for brick in self.__bricks:
+            brick.draw(self._display_surf)
 
     def on_render(self):
         pass
@@ -64,12 +63,20 @@ class Noid:
         pygame.quit()
         sys.exit(0)
 
+    def display_level(self, lvl: str):
+        self.player = Player(self._size)
+        self.player.draw(self._display_surf)
+
+        level = Level(lvl)
+        for brick in level.bricks:
+            brick.draw(self._display_surf)
+            self.__bricks.append(brick)
+
     def on_execute(self):
         if self.on_init() is False:
             self._running = False
 
-        player = Player(self._size)
-        self.__objects["player"] = player
+        self.display_level("01")
 
         while self._running:
             self._display_surf.fill(palette.get_colour("white"))
