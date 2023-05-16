@@ -4,10 +4,16 @@ from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
 
-    H_SIZE = 64
-    V_SIZE = 16
-    DISPLAY_H_SIZE = DISPLAY_V_SIZE = 0
-    speed = 0
+    """Player Sizes:
+    0: Small
+    1: Normal
+    2: Large
+    3: Extra Large
+    """
+    size = 1
+    
+    h_size = 64
+    v_size = 16
 
     def __init__(self, size, speed=5):
         super().__init__()
@@ -17,7 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.DISPLAY_V_SIZE = size[1]
 
         self.image = pygame.image.load("./img/player.png")
-        self.image = pygame.transform.scale(self.image, (self.H_SIZE, self.V_SIZE))
+        self.image = pygame.transform.scale(self.image, (self.h_size, self.v_size))
 
         self.rect = self.image.get_rect()
         self.rect.center = (self.DISPLAY_H_SIZE / 2, self.DISPLAY_V_SIZE - 16)
@@ -47,6 +53,20 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
+        
+    def grow(self):
+        if self.size >= 3:
+            return
+        self.size += 1
+        self.h_size *= 1.5
+        self.image = pygame.transform.scale(self.image, (self.h_size, self.v_size))
+
+    def shrink(self):
+        if self.size <= 0:
+            return
+        self.size -= 1
+        self.h_size //= 1.5
+        self.image = pygame.transform.scale(self.image, (self.h_size, self.v_size))
 
     def update(self):
 

@@ -21,7 +21,9 @@ CANVAS_V_SIZE = 720
 END OF PARAMETERS
 """
 
-brick_data = []
+level_data = []
+powerups = ["grow", "shrink", "multi", "laser", "super", "catch", "1up", "next", "guard"]
+level_data.append(powerups)
 
 palette = Palette()
 colours = palette.get_palette()
@@ -36,7 +38,7 @@ def draw_line(offset: int = 0):
         v_size = 16
         position = (brick_x, brick_y)
 
-        brick_data.append({
+        level_data.append({
             "h_size": h_size,
             "v_size": v_size,
             "position": position,
@@ -51,4 +53,4 @@ for i in range(len(colours)):
         draw_line(16)
 
 with open(f"./cfg/levels/{LEVEL}.json", "w") as f:
-    json.dump(brick_data, f)
+    json.dump(level_data, f)
