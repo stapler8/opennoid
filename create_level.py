@@ -22,7 +22,7 @@ END OF PARAMETERS
 """
 
 level_data = []
-powerups = ["grow", "shrink", "multi", "laser", "super", "catch", "1up", "next", "guard"]
+powerups = ["grow", "shrink", "multi", "laser", "super", "catch", "1up", "next", "energy"]
 level_data.append(powerups)
 
 palette = Palette()
@@ -38,6 +38,7 @@ def draw_line(offset: int = 0):
         v_size = 16
         position = (brick_x, brick_y)
 
+        # pycharm gives a warning here, but this works as-intended
         level_data.append({
             "h_size": h_size,
             "v_size": v_size,
@@ -52,5 +53,11 @@ for i in range(len(colours)):
     else:
         draw_line(16)
 
-with open(f"./cfg/levels/{LEVEL}.json", "w") as f:
-    json.dump(level_data, f)
+try:
+    with open(f"./cfg/levels/{LEVEL}.json", "w") as f:
+        json.dump(level_data, f)
+    print("Done!")
+
+except Exception as ex:
+    print(ex)
+
