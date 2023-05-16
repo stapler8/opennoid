@@ -7,6 +7,7 @@ import json
 First index of a level .json is ALWAYS the powerup types
 """
 
+
 class Level:
     bricks = []
     __raw_objects = []

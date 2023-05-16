@@ -1,6 +1,7 @@
 import pygame
 
 from src.core.palette import Palette
+from src.objects.powerup import Powerup
 
 import random
 
@@ -12,7 +13,7 @@ class Brick(pygame.sprite.Sprite):
     def __init__(self,
                  h_size: int = 32,
                  v_size: int = 16,
-                 powerup: str = "",
+                 powerup: Powerup = Powerup(),
                  position: tuple = (32, 16),
                  colour: str = ""
                  ):
@@ -36,7 +37,5 @@ class Brick(pygame.sprite.Sprite):
         surface.blit(self.image, self.rect)
 
     def destroy(self):
-        return self._powerup
         self.kill()
-
-
+        return self._powerup
