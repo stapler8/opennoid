@@ -6,6 +6,7 @@ from pygame.locals import *
 import json
 from src.core.palette import Palette
 from src.core.level import Level
+from src.objects.ball import Ball
 from src.objects.player import Player
 
 settings = {}
@@ -22,8 +23,11 @@ def import_settings():
 
 class Noid:
     __bricks = pygame.sprite.Group()
+    __ball_container = pygame.sprite.Group()
     player = None
+    ball = None
     level = "01"
+    lives = 2
 
     def __init__(self):
 
@@ -59,14 +63,33 @@ class Noid:
 
         self.player.update()
         self.player.draw(self._display_surf)
+
+        self.ball.draw(self._display_surf)
+
         for brick in self.__bricks:
             brick.draw(self._display_surf)
 
         if not self.__bricks:
             self.increment_level()
 
+        if not self.__ball_container:
+            self.ball_lost()
+
     def on_render(self):
         pass
+
+    def ball_lost(self):
+        if self.lives > 0:
+            self.lives -= 1
+
+            self.ball = Ball(self._size)
+            self.__ball_container.add(self.ball)
+
+        else:
+            self.game_over()
+
+    def game_over(self):
+        self._running = False
 
     @staticmethod
     def on_cleanup():
@@ -76,6 +99,10 @@ class Noid:
     def display_level(self, lvl: str):
         self.player = Player(self._size)
         self.player.draw(self._display_surf)
+
+        self.ball = Ball(size=self._size)
+        self.ball.draw(self._display_surf)
+        self.__ball_container.add(self.ball)
 
         level = Level(lvl)
         for brick in level.bricks:

@@ -38,4 +38,4 @@ class Brick(pygame.sprite.Sprite):
 
     def destroy(self):
         self.kill()
-        return self._powerup
+        return self._powerup, self.rect.center
